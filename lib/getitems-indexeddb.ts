@@ -1,51 +1,62 @@
+import { Forage, Options, LocalForageComplete } from '@luiz-monad/localforage/dist/types';
 import IDBKeyRange from './idbKeyRange';
+import { ItemsResult } from './localforage-getitems';
 
-export function getItemsIndexedDB(keys /*, callback*/) {
+export interface DbInfo extends Options {
+    db: IDBDatabase | null;
+    version: number;
+}
+
+export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete, keys: string[]) {
     keys = keys.slice();
     var localforageInstance = this;
-    function comparer(a, b) {
+    function comparer(a: string, b: string) {
         return a < b ? -1 : a > b ? 1 : 0;
     }
 
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
         localforageInstance
             .ready()
             .then(function () {
                 // Thanks https://hacks.mozilla.org/2014/06/breaking-the-borders-of-indexeddb/
                 var dbInfo = localforageInstance._dbInfo;
-                var store = dbInfo.db
-                    .transaction(dbInfo.storeName, 'readonly')
+                var store = dbInfo
+                    .db!.transaction(dbInfo.storeName, 'readonly')
                     .objectStore(dbInfo.storeName);
 
                 var set = keys.sort(comparer);
 
                 var keyRangeValue = IDBKeyRange.bound(keys[0], keys[keys.length - 1], false, false);
 
-                var req;
+                var breq: IDBRequest<any>;
 
-                if ('getAll' in store) {
-                    req = store.getAll(keyRangeValue);
+                if ('getAll' in (store as any)) {
+                    const req = store.getAll(keyRangeValue);
                     req.onsuccess = function () {
-                        var value = req.result;
-                        if (value === undefined) {
-                            value = null;
+                        var result: ItemsResult<T> = {};
+                        var avalue = req.result as any[] | undefined;
+                        if (avalue !== undefined) {
+                            for (var i = 0, len = avalue.length; i < len; i++) {
+                                result[i.toString()] = avalue[i];
+                            }
                         }
-                        resolve(value);
+                        resolve(result);
                     };
+                    breq = req;
                 } else {
-                    req = store.openCursor(keyRangeValue);
-                    var result = {};
+                    const req = store.openCursor(keyRangeValue);
+                    var result: Record<string, T> = {};
                     var i = 0;
 
-                    req.onsuccess = function (/*event*/) {
-                        var cursor = req.result; // event.target.result;
+                    req.onsuccess = function () {
+                        var cursor = req.result;
 
                         if (!cursor) {
                             resolve(result);
                             return;
                         }
 
-                        var key = cursor.key;
+                        var key = cursor.key as string;
 
                         while (key > set[i]) {
                             i++; // The cursor has passed beyond this key. Check next.
@@ -74,10 +85,11 @@ export function getItemsIndexedDB(keys /*, callback*/) {
                             cursor.continue(set[i]);
                         }
                     };
+                    breq = req;
                 }
 
-                req.onerror = function (/*event*/) {
-                    reject(req.error);
+                breq.onerror = function () {
+                    reject(breq.error);
                 };
             })
             .catch(reject);

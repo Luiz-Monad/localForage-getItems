@@ -1,8 +1,15 @@
+import { Forage, Options, LocalForageComplete } from '@luiz-monad/localforage/dist/types';
 import { getSerializerPromise } from './utils';
+import { ItemsResult } from './localforage-getitems';
 
-export function getItemsWebsql(keys /*, callback*/) {
+export interface DbInfo extends Options {
+    db: Database | null;
+    version: number;
+}
+
+export function getItemsWebsql<T>(this: Forage<DbInfo> & LocalForageComplete, keys: string[]) {
     var localforageInstance = this;
-    var promise = new Promise(function (resolve, reject) {
+    var promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
         localforageInstance
             .ready()
             .then(function () {
@@ -10,31 +17,30 @@ export function getItemsWebsql(keys /*, callback*/) {
             })
             .then(function (serializer) {
                 var dbInfo = localforageInstance._dbInfo;
-                dbInfo.db.transaction(function (t) {
+                dbInfo.db!.transaction(function (t) {
                     var queryParts = new Array(keys.length);
                     for (var i = 0, len = keys.length; i < len; i++) {
                         queryParts[i] = '?';
                     }
 
                     t.executeSql(
-                        'SELECT * FROM ' +
-                            dbInfo.storeName +
-                            ' WHERE (key IN (' +
-                            queryParts.join(',') +
-                            '))',
+                        `SELECT * FROM ${dbInfo.storeName} WHERE (key IN (${queryParts.join(
+                            ','
+                        )}))`,
                         keys,
                         function (t, results) {
-                            var result = {};
+                            var result: ItemsResult<T> = {};
 
                             var rows = results.rows;
                             for (var i = 0, len = rows.length; i < len; i++) {
                                 var item = rows.item(i);
-                                var value = item.value;
+                                var svalue = item.value as string;
+                                let value: T | null = null;
 
                                 // Check to see if this is serialized content we need to
                                 // unpack.
-                                if (value) {
-                                    value = serializer.deserialize(value);
+                                if (svalue) {
+                                    value = serializer.deserialize(svalue) as T;
                                 }
 
                                 result[item.key] = value;
@@ -44,6 +50,7 @@ export function getItemsWebsql(keys /*, callback*/) {
                         },
                         function (t, error) {
                             reject(error);
+                            return false;
                         }
                     );
                 });

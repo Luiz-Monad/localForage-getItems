@@ -1,5 +1,4 @@
 function getIDBKeyRange() {
-    /* global IDBKeyRange, webkitIDBKeyRange, mozIDBKeyRange */
     if (typeof IDBKeyRange !== 'undefined') {
         return IDBKeyRange;
     }
@@ -9,7 +8,13 @@ function getIDBKeyRange() {
     if (typeof mozIDBKeyRange !== 'undefined') {
         return mozIDBKeyRange;
     }
+    if (typeof OIDBKeyRange !== 'undefined') {
+        return OIDBKeyRange;
+    }
+    if (typeof msIDBKeyRange !== 'undefined') {
+        return msIDBKeyRange;
+    }
 }
 
-var idbKeyRange = getIDBKeyRange();
+var idbKeyRange = getIDBKeyRange()!;
 export default idbKeyRange;
