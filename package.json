@@ -2,7 +2,7 @@
     "name": "@luiz-monad/localforage-getitems",
     "version": "1.4.3",
     "description": "Adds getItems method to localForage.",
-    "homepage": "https://github.com/conversejs/localForage-getItems",
+    "homepage": "https://github.com/luiz-monad/localForage-getitems",
     "main": "dist/localforage-getitems.js",
     "jsnext:main": "dist/localforage-getitems.es6.js",
     "typings": "dist/localforage-getitems.d.ts",
@@ -16,7 +16,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/conversejs/localForage-getItems.git"
+        "url": "git://github.com/luiz-monad/localForage-getitems.git"
     },
     "keywords": [
         "localforage",
@@ -36,6 +36,8 @@
         "@babel/preset-env": "^7.22.20",
         "@rollup/plugin-babel": "^6.0.3",
         "@rollup/plugin-multi-entry": "^6.0.0",
+        "@types/chai": "^4.3.6",
+        "@types/mocha": "^10.0.2",
         "@types/websql": "^0.0.28",
         "@typescript-eslint/eslint-plugin": "^6.7.4",
         "@typescript-eslint/parser": "^6.7.4",
@@ -48,6 +50,7 @@
         "mocha": "^10.2.0",
         "requirejs": "^2.3.6",
         "rollup": "^3.29.4",
+        "source-map-support": "^0.5.21",
         "typescript": "^5.2.2"
     },
     "dependencies": {
