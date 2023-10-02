@@ -1,10 +1,16 @@
-﻿import { extendPrototype } from 'localforage-getitems';
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-namespace */
+/* eslint-disable no-var */
+/* eslint-disable prefer-const */
+import { ItemsResult, extendPrototype } from 'localforage-getitems';
+import localforage from '@luiz-monad/localforage';
 
-declare let localforage: LocalForage;
+type LocalForageGetItemsResult = ItemsResult<any>;
 
 namespace LocalForageGetItemsTest {
     {
-        let localforage2: LocalForageWithGetItems = extendPrototype(localforage);
+        let localforage2: LocalForageComplete = extendPrototype(localforage);
     }
 
     {

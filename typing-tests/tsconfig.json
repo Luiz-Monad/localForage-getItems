@@ -27,11 +27,9 @@
 
         "baseUrl": "../build/",
         "paths": {
-            "localforage": ["./localforage.d.ts"],
-            "types": ["./types.d.ts"],
-            "utils/serializer": ["./utils/serializer"]
+            "localforage-getitems": ["./localforage-getitems.d.ts"]
         }
     },
-    "files": ["../src/globals.d.ts", "./localforage-tests.ts"],
+    "files": ["../lib/globals.d.ts", "./index.ts"],
     "exclude": ["../node_modules/**/*", "./build/**/*", "./test/**/*"]
 }

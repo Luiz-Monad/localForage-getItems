@@ -1,4 +1,3 @@
-
 declare global {
     // declare let IDBKeyRange: typeof IDBKeyRange | undefined;
     declare let webkitIDBKeyRange: typeof IDBKeyRange | undefined;

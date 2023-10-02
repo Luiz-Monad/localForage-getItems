@@ -21,15 +21,12 @@
         // "allowJs": true,
         "checkJs": true,
 
-        "rootDir": "./",
-        "outDir": "",
+        "rootDir": "../",
+        "outDir": "../build/",
 
         "baseUrl": "../build/",
         "paths": {
-            "types": ["./types.d.ts"],
-            "drivers/indexeddb": ["./drivers/indexeddb"],
-            "drivers/websql": ["./drivers/websql"],
-            "drivers/localstorage": ["./drivers/localstorage"]
+            "localforage-getitems": ["./localforage-getitems.d.ts"]
         }
     }
 }

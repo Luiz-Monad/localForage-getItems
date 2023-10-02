@@ -26,7 +26,12 @@ export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete,
 
                 const set = keys.sort(comparer);
 
-                const keyRangeValue = IDBKeyRange.bound(keys[0], keys[keys.length - 1], false, false);
+                const keyRangeValue = IDBKeyRange.bound(
+                    keys[0],
+                    keys[keys.length - 1],
+                    false,
+                    false
+                );
 
                 let breq: IDBRequest<any>;
 
