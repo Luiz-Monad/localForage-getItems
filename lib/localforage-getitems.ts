@@ -11,13 +11,13 @@ export function localforageGetItems<T>(
     keys: string[],
     callback?: Callback<ItemsResult<T>>
 ) {
-    var localforageInstance = this;
+    const localforageInstance = this;
 
-    var promise: Promise<ItemsResult<T>>;
+    let promise: Promise<ItemsResult<T>>;
     if (!arguments.length || keys === null) {
         promise = (getAllItemsUsingIterate<T>).apply(localforageInstance);
     } else {
-        var currentDriver = localforageInstance.driver();
+        const currentDriver = localforageInstance.driver();
         if (currentDriver === localforageInstance.INDEXEDDB) {
             promise = (getItemsIndexedDB<T>).apply(localforageInstance as any, [keys]);
         } else if (currentDriver === localforageInstance.WEBSQL) {
@@ -32,22 +32,22 @@ export function localforageGetItems<T>(
 }
 
 export function extendPrototype(localforage: LocalForageComplete) {
-    var localforagePrototype = Object.getPrototypeOf(localforage);
+    const localforagePrototype = Object.getPrototypeOf(localforage);
     if (localforagePrototype) {
         localforagePrototype.getItems = localforageGetItems;
-        localforagePrototype.getItems.indexedDB = function <T>(
+        localforagePrototype.getItems.indexedDB = function <T> (
             this: Forage<DbInfoIndexedDB> & LocalForageComplete,
             keys: string[]
         ) {
             return (getItemsIndexedDB<T>).apply(this, [keys]);
         };
-        localforagePrototype.getItems.websql = function <T>(
+        localforagePrototype.getItems.websql = function <T> (
             this: Forage<DbInfoWebsql> & LocalForageComplete,
             keys: string[]
         ) {
             return (getItemsWebsql<T>).apply(this, [keys]);
         };
-        localforagePrototype.getItems.generic = function <T>(
+        localforagePrototype.getItems.generic = function <T> (
             this: LocalForageComplete,
             keys: string[]
         ) {
@@ -56,7 +56,7 @@ export function extendPrototype(localforage: LocalForageComplete) {
     }
 }
 
-export var extendPrototypeResult = extendPrototype(localforage);
+export const extendPrototypeResult = extendPrototype(localforage);
 
 export type ItemsResult<T> = Record<string, T | null>;
 
@@ -66,6 +66,9 @@ export interface MethodsCoreWithGetItems {
         callback?: Callback<ItemsResult<T>>
     ): Promise<ItemsResult<T>>;
     getItems<T>(callback?: Callback<ItemsResult<T>>): Promise<ItemsResult<T>>;
+    getItems(): {
+        generic: MethodsCoreWithGetItems['getItems']
+    }
 }
 
 declare module '@luiz-monad/localforage/dist/types' {

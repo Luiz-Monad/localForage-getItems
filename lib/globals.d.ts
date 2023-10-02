@@ -1,4 +1,3 @@
-import { Database } from 'websql';
 
 declare global {
     // declare let IDBKeyRange: typeof IDBKeyRange | undefined;

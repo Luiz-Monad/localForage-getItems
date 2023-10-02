@@ -55,6 +55,7 @@ export function executeCallback<T>(promise: Promise<T>, callback?: Callback<T>) 
                 callback(null, result);
             },
             function (error) {
+                // eslint-disable-next-line @typescript-eslint/ban-types
                 (callback as Function)(error);
             }
         );
@@ -68,8 +69,8 @@ export function getItemKeyValue<T>(
     key: string,
     callback?: Callback<KeyValue<T>>
 ) {
-    var localforageInstance = this;
-    var promise = localforageInstance.getItem<T>(key).then(function (value) {
+    const localforageInstance = this;
+    const promise = localforageInstance.getItem<T>(key).then(function (value) {
         return {
             key: key,
             value: value

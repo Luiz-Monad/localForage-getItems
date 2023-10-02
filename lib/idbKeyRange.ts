@@ -16,5 +16,5 @@ function getIDBKeyRange() {
     }
 }
 
-var idbKeyRange = getIDBKeyRange()!;
+const idbKeyRange = getIDBKeyRange()!;
 export default idbKeyRange;

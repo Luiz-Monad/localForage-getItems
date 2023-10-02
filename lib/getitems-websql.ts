@@ -8,18 +8,18 @@ export interface DbInfo extends Options {
 }
 
 export function getItemsWebsql<T>(this: Forage<DbInfo> & LocalForageComplete, keys: string[]) {
-    var localforageInstance = this;
-    var promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
+    const localforageInstance = this;
+    const promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
         localforageInstance
             .ready()
             .then(function () {
                 return getSerializerPromise(localforageInstance);
             })
             .then(function (serializer) {
-                var dbInfo = localforageInstance._dbInfo;
+                const dbInfo = localforageInstance._dbInfo;
                 dbInfo.db!.transaction(function (t) {
-                    var queryParts = new Array(keys.length);
-                    for (var i = 0, len = keys.length; i < len; i++) {
+                    const queryParts = new Array(keys.length);
+                    for (let i = 0, len = keys.length; i < len; i++) {
                         queryParts[i] = '?';
                     }
 
@@ -29,12 +29,12 @@ export function getItemsWebsql<T>(this: Forage<DbInfo> & LocalForageComplete, ke
                         )}))`,
                         keys,
                         function (t, results) {
-                            var result: ItemsResult<T> = {};
+                            const result: ItemsResult<T> = {};
 
-                            var rows = results.rows;
-                            for (var i = 0, len = rows.length; i < len; i++) {
-                                var item = rows.item(i);
-                                var svalue = item.value as string;
+                            const rows = results.rows;
+                            for (let i = 0, len = rows.length; i < len; i++) {
+                                const item = rows.item(i);
+                                const svalue = item.value as string;
                                 let value: T | null = null;
 
                                 // Check to see if this is serialized content we need to

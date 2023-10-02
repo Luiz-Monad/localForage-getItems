@@ -9,34 +9,34 @@ export interface DbInfo extends Options {
 
 export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete, keys: string[]) {
     keys = keys.slice();
-    var localforageInstance = this;
+    const localforageInstance = this;
     function comparer(a: string, b: string) {
         return a < b ? -1 : a > b ? 1 : 0;
     }
 
-    var promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
+    const promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
         localforageInstance
             .ready()
             .then(function () {
                 // Thanks https://hacks.mozilla.org/2014/06/breaking-the-borders-of-indexeddb/
-                var dbInfo = localforageInstance._dbInfo;
-                var store = dbInfo
+                const dbInfo = localforageInstance._dbInfo;
+                const store = dbInfo
                     .db!.transaction(dbInfo.storeName, 'readonly')
                     .objectStore(dbInfo.storeName);
 
-                var set = keys.sort(comparer);
+                const set = keys.sort(comparer);
 
-                var keyRangeValue = IDBKeyRange.bound(keys[0], keys[keys.length - 1], false, false);
+                const keyRangeValue = IDBKeyRange.bound(keys[0], keys[keys.length - 1], false, false);
 
-                var breq: IDBRequest<any>;
+                let breq: IDBRequest<any>;
 
                 if ('getAll' in (store as any)) {
                     const req = store.getAll(keyRangeValue);
                     req.onsuccess = function () {
-                        var result: ItemsResult<T> = {};
-                        var avalue = req.result as any[] | undefined;
+                        const result: ItemsResult<T> = {};
+                        const avalue = req.result as any[] | undefined;
                         if (avalue !== undefined) {
-                            for (var i = 0, len = avalue.length; i < len; i++) {
+                            for (let i = 0, len = avalue.length; i < len; i++) {
                                 result[i.toString()] = avalue[i];
                             }
                         }
@@ -45,18 +45,18 @@ export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete,
                     breq = req;
                 } else {
                     const req = store.openCursor(keyRangeValue);
-                    var result: Record<string, T> = {};
-                    var i = 0;
+                    const result: Record<string, T> = {};
+                    let i = 0;
 
                     req.onsuccess = function () {
-                        var cursor = req.result;
+                        const cursor = req.result;
 
                         if (!cursor) {
                             resolve(result);
                             return;
                         }
 
-                        var key = cursor.key as string;
+                        const key = cursor.key as string;
 
                         while (key > set[i]) {
                             i++; // The cursor has passed beyond this key. Check next.
@@ -72,7 +72,7 @@ export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete,
                             // The current cursor value should be included and we should continue
                             // a single step in case next item has the same key or possibly our
                             // next key in set.
-                            var value = cursor.value;
+                            let value = cursor.value;
                             if (value === undefined) {
                                 value = null;
                             }
