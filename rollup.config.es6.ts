@@ -1,6 +1,9 @@
-import config from './rollup.config';
+import { default as conf } from './rollup.config';
 
-config.format = 'es';
-config.dest = 'dist/localforage-getitems.es6.js';
+const config = {
+    ...conf,
+    format: 'es',
+    dest: 'dist/localforage-getitems.es6.js',
+};
 
 export default config;

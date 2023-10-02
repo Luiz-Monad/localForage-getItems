@@ -1,8 +1,6 @@
 {
-    "compileOnSave": false,
+    "include": ["./lib/**/*"],
     "compilerOptions": {
-        "noEmit": true,
-
         "target": "ES2015",
         "module": "ESNext",
         "moduleResolution": "Node",
@@ -16,22 +14,14 @@
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true,
         "removeComments": false,
+        "declaration": true,
 
         "lib": ["DOM", "ESNext"],
 
         // "allowJs": true,
         "checkJs": true,
 
-        "rootDir": "../",
-        "outDir": "",
-
-        "baseUrl": "../build/",
-        "paths": {
-            "localforage": ["./localforage.d.ts"],
-            "types": ["./types.d.ts"],
-            "utils/serializer": ["./utils/serializer"]
-        }
-    },
-    "files": ["../src/globals.d.ts", "./localforage-tests.ts"],
-    "exclude": ["../node_modules/**/*", "./build/**/*", "./test/**/*"]
+        "rootDir": "./lib",
+        "outDir": ""
+    }
 }

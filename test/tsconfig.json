@@ -1,8 +1,7 @@
 {
-    "compileOnSave": false,
+    "include": ["../test/**/*"],
+    "exclude": ["node_modules/@types/node/globals.d.ts"],
     "compilerOptions": {
-        "noEmit": true,
-
         "target": "ES2015",
         "module": "ESNext",
         "moduleResolution": "Node",
@@ -22,16 +21,15 @@
         // "allowJs": true,
         "checkJs": true,
 
-        "rootDir": "../",
+        "rootDir": "./",
         "outDir": "",
 
         "baseUrl": "../build/",
         "paths": {
-            "localforage": ["./localforage.d.ts"],
             "types": ["./types.d.ts"],
-            "utils/serializer": ["./utils/serializer"]
+            "drivers/indexeddb": ["./drivers/indexeddb"],
+            "drivers/websql": ["./drivers/websql"],
+            "drivers/localstorage": ["./drivers/localstorage"]
         }
-    },
-    "files": ["../src/globals.d.ts", "./localforage-tests.ts"],
-    "exclude": ["../node_modules/**/*", "./build/**/*", "./test/**/*"]
+    }
 }

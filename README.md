@@ -10,36 +10,38 @@ years.
 
 ## Requirements
 
-* [localForage](https://github.com/mozilla/localForage) v1.4.0+
-  * for earlier versions of localforage, please use the v1.1.x releases
+-   [localForage](https://github.com/mozilla/localForage) v1.4.0+
+    -   for earlier versions of localforage, please use the v1.1.x releases
 
 ## Installation
+
 `npm i @converse/localforage-getitems`
 
 ## jsperf links
-* [default driver order (indexedDB prefered)](https://jsperf.com/localforage-getitems-2017/1)
-* [websql (not for firefox)](https://jsperf.com/localforage-getitems-websql-2017b/1)
+
+-   [default driver order (indexedDB prefered)](https://jsperf.com/localforage-getitems-2017/1)
+-   [websql (not for firefox)](https://jsperf.com/localforage-getitems-websql-2017b/1)
 
 ## API
 
 Just like `getItem()` but you can pass an array with the keys that need to be retrieved.
 
 ```javascript
-const keys = ['asdf','asap','async'];
+const keys = ['asdf', 'asap', 'async'];
 
 localforage.getItems(keys).then((results) => {
-  console.log(results);
-  // prints:
-  // {
-  //   asdf: 'asdf value!',
-  //   asap: 'asap value!',
-  //   async: 'async value!'
-  // }
+    console.log(results);
+    // prints:
+    // {
+    //   asdf: 'asdf value!',
+    //   asap: 'asap value!',
+    //   async: 'async value!'
+    // }
 
-  console.log(results.asdf);
-  console.log(results['asdf']);
-  console.log(results[keys[0]]);
-  // all the above print 'asdf value!'
+    console.log(results.asdf);
+    console.log(results['asdf']);
+    console.log(results[keys[0]]);
+    // all the above print 'asdf value!'
 });
 ```
 
