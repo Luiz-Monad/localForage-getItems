@@ -27,18 +27,17 @@ export function localforageGetItems(keys, callback) {
     return promise;
 }
 
-
 export function extendPrototype(localforage) {
     var localforagePrototype = Object.getPrototypeOf(localforage);
     if (localforagePrototype) {
         localforagePrototype.getItems = localforageGetItems;
-        localforagePrototype.getItems.indexedDB = function(){
+        localforagePrototype.getItems.indexedDB = function () {
             return getItemsIndexedDB.apply(this, arguments);
         };
-        localforagePrototype.getItems.websql = function(){
+        localforagePrototype.getItems.websql = function () {
             return getItemsWebsql.apply(this, arguments);
         };
-        localforagePrototype.getItems.generic = function(){
+        localforagePrototype.getItems.generic = function () {
             return getItemsGeneric.apply(this, arguments);
         };
     }

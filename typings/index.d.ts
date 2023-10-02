@@ -9,13 +9,12 @@ interface ILocalForageWithGetItems {
     getItems(): Promise<LocalForageGetItemsResult>;
 }
 
-interface LocalForage extends ILocalForageWithGetItems { }
+interface LocalForage extends ILocalForageWithGetItems {}
 
-interface LocalForageWithGetItems extends LocalForage { }
+interface LocalForageWithGetItems extends LocalForage {}
 
-declare module "localforage-getitems" {
-    export function extendPrototype(localforage: LocalForage)
-        : LocalForageWithGetItems;
+declare module 'localforage-getitems' {
+    export function extendPrototype(localforage: LocalForage): LocalForageWithGetItems;
 
     export var extendPrototypeResult: boolean;
 }
