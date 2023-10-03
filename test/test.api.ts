@@ -16,7 +16,7 @@ const driverApiMethods = ['getItems'];
 
 const indexedDB =
     // eslint-disable-next-line no-use-before-define
-    global.indexedDB ||
+    globalThis.indexedDB ||
     window.indexedDB ||
     window.webkitIndexedDB ||
     window.mozIndexedDB ||
@@ -736,21 +736,22 @@ DRIVERS.forEach(function (driverName, driverIndex) {
 });
 
 describe('unsupported driver', function () {
-    const dummyStorageDriver: import('@luiz-monad/localforage/dist/types').OptionalDropInstanceDriver = {
-        _driver: 'dummyStorageDriver',
-        _initStorage: localforage._initStorage,
-        _support: true,
-        iterate: localforage.iterate,
-        getItem: localforage.getItem,
-        setItem: localforage.setItem,
-        removeItem: localforage.removeItem,
-        clear: localforage.clear,
-        length: localforage.length,
-        key: localforage.key,
-        keys: localforage.keys,
-        dropInstance: localforage.dropInstance
-    };
-    
+    const dummyStorageDriver: import('@luiz-monad/localforage/dist/types').OptionalDropInstanceDriver =
+        {
+            _driver: 'dummyStorageDriver',
+            _initStorage: localforage._initStorage,
+            _support: true,
+            iterate: localforage.iterate,
+            getItem: localforage.getItem,
+            setItem: localforage.setItem,
+            removeItem: localforage.removeItem,
+            clear: localforage.clear,
+            length: localforage.length,
+            key: localforage.key,
+            keys: localforage.keys,
+            dropInstance: localforage.dropInstance
+        };
+
     it('sets a custom driver', function () {
         return localforage.defineDriver(dummyStorageDriver, function () {
             return localforage.setDriver(dummyStorageDriver._driver, function () {

@@ -9,6 +9,9 @@
     "scripts": {
         "prebuild": "eslint lib/*.ts",
         "build": "rollup -c rollup.config.umd.mjs && rollup -c rollup.config.es6.mjs && tsc --project typing-tests",
+        "pretest": "eslint test/*.ts && rollup -c rollup.config.test.deps.mjs && rollup -c rollup.config.test.mjs",
+        "test": "cd test/grunt && npx npm test",
+        "watch": "cd test/grunt && npx npm run watch",
         "prepublish": "npm run build && npm test",
         "prettify": "prettier --write ."
     },
@@ -33,7 +36,9 @@
         "@babel/core": "^7.23.0",
         "@babel/preset-env": "^7.22.20",
         "@rollup/plugin-babel": "^6.0.3",
+        "@rollup/plugin-commonjs": "^25.0.4",
         "@rollup/plugin-multi-entry": "^6.0.0",
+        "@rollup/plugin-node-resolve": "^15.2.1",
         "@rollup/plugin-typescript": "^11.1.4",
         "@types/chai": "^4.3.6",
         "@types/mocha": "^10.0.2",

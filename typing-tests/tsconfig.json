@@ -25,7 +25,7 @@
         "rootDir": "../",
         "outDir": "",
 
-        "baseUrl": "../build/",
+        "baseUrl": "../dist/",
         "paths": {
             "localforage-getitems": ["./localforage-getitems.d.ts"]
         }

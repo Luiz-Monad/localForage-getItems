@@ -1,6 +1,6 @@
 {
     "include": ["../test/**/*"],
-    "exclude": ["node_modules/@types/node/globals.d.ts"],
+    "exclude": ["./grunt/*", "node_modules/**/*"],
     "compilerOptions": {
         "target": "ES2015",
         "module": "ESNext",
@@ -22,9 +22,9 @@
         "checkJs": true,
 
         "rootDir": "../",
-        "outDir": "../build/",
+        "outDir": "../build/test",
 
-        "baseUrl": "../build/",
+        "baseUrl": "../dist/",
         "paths": {
             "localforage-getitems": ["./localforage-getitems.d.ts"]
         }

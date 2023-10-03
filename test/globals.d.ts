@@ -49,18 +49,4 @@ declare global {
     }
 }
 
-// eslint-disable-next-line no-var
-declare var global: typeof globalThis;
-
-// // copy from src/globals.d.ts
-// declare global {
-//     declare let indexedDB: IDBFactory | undefined;
-//     declare let webkitIndexedDB: IDBFactory | undefined;
-//     declare let mozIndexedDB: IDBFactory | undefined;
-//     declare let OIndexedDB: IDBFactory | undefined;
-//     declare let msIndexedDB: IDBFactory | undefined;
-
-//     interface Window {}
-// }
-
 export {};

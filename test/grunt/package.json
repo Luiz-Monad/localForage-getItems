@@ -1,0 +1,18 @@
+{
+    "scripts": {
+        "build": "cd ../.. && npm run pretest",
+        "test": "npm install && node -e \"require('grunt').cli()\" null test",
+        "watch": "npm install && node -e \"require('grunt').cli()\" null"
+    },
+    "devDependencies": {
+        "grunt": "^1.6.1",
+        "grunt-cli": "^1.4.3",
+        "grunt-contrib-connect": "^4.0.0",
+        "grunt-contrib-copy": "^1.0.0",
+        "grunt-contrib-watch": "^1.1.0",
+        "grunt-run": "^0.8.1",
+        "grunt-shell": "^4.0.0",
+        "load-grunt-tasks": "^5.1.0",
+        "mocha-headless-chrome": "^4.0.0"
+    }
+}
