@@ -1,4 +1,3 @@
-import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 
 const deps = {
@@ -8,25 +7,20 @@ const deps = {
     'localforage-getitems': './dist/localforage-getitems.js'
 };
 
-// export default Object.entries(deps).map(([output, input]) => ({
-//     input: input,
-//     output: {
-//         file: `build/deps/${output}/${output}.js`,
-//         name: output,
-//         format: 'amd',
-//         amd: {
-//           autoId: true
-//         }
-//     },
-//     plugins: [resolve(), commonjs()]
-// }));
-
-export default {
-    input: deps,
+export default Object.entries(deps).map(([output, input]) => ({
+    input: input,
     output: {
-        dir: 'build/deps',
-        entryFileNames: '[name]/[name].js',
-        format: 'cjs'
+        dir: `build/deps/${output}`,
+        name: output,
+        format: 'amd',
+        amd: {
+            autoId: true
+        },
+        paths: {
+            '@luiz-monad/localforage': 'localforage'
+        }
+        // preserveModules: true
     },
-    plugins: [resolve(), commonjs()]
-};
+    plugins: [commonjs()],
+    external: Object.keys(deps) + ['localforage']
+}));

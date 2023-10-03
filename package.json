@@ -51,6 +51,7 @@
         "eslint-plugin-prettier": "^5.0.0",
         "husky": "^8.0.3",
         "mocha": "^10.2.0",
+        "mocha-headless-chrome": "^4.0.0",
         "prettier": "^3.0.3",
         "requirejs": "^2.3.6",
         "rollup": "^3.29.4",

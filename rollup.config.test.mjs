@@ -7,41 +7,20 @@ const files = {
     runner: 'test/runner.ts'
 };
 
-// export default Object.entries(files).map(([output, input]) => ({
-//     input: input,
-//     output: {
-//         file: `build/test/${output}.js`,
-//         name: output,
-//         format: 'amd',
-//         amd: {
-//           autoId: true
-//         },
-//         sourcemap: true
-//     },
-//     plugins: [typescript({ tsconfig: './test/tsconfig.json' }), babel({ babelHelpers: 'bundled' })]
-// }));
-
-// export default {
-//     input: ['test/test.api.ts', 'test/runner.ts'],
-//     output: {
-//         dir: 'build/',
-//         format: 'cjs',
-//         sourcemap: true,
-//         preserveModules: true
-//     },
-//     plugins: [
-//         typescript({tsconfig: './test/tsconfig.json'}), 
-//         babel({ babelHelpers: 'bundled' })
-// ]
-// };
-
 export default {
     input: files,
     output: {
         dir: 'build/test',
         entryFileNames: '[name].js',
-        format: 'cjs',
+        format: 'amd',
+        amd: {
+            autoId: true
+        },
         sourcemap: true
     },
-    plugins: [typescript({ tsconfig: './test/tsconfig.json' }), babel({ babelHelpers: 'bundled' }), commonjs()]
+    plugins: [
+        typescript({ tsconfig: './test/tsconfig.json' }),
+        babel({ babelHelpers: 'bundled' }),
+        commonjs()
+    ]
 };

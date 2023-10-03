@@ -45,7 +45,7 @@ module.exports = exports = function (grunt) {
         },
         watch: {
             test: {
-                files: ['../*.ts', '../**/*.ts', '../*.html'],
+                files: ['../../rollup.config.test.*', '../*.ts', '../**/*.ts', '../*.html'],
                 tasks: ['build:test']
             },
             'mocha:unit': {
