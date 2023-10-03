@@ -3,5 +3,5 @@ import typescript from '@rollup/plugin-typescript';
 
 export default {
     input: 'lib/localforage-getitems.ts',
-    plugins: [babel({ babelHelpers: 'bundled' }), typescript()]
+    plugins: [typescript(), babel({ babelHelpers: 'bundled' })]
 };

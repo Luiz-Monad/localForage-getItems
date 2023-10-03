@@ -39,20 +39,21 @@ export function localforageGetItems<T>(
 export function extendPrototype(localforage: LocalForageComplete) {
     const localforagePrototype = Object.getPrototypeOf(localforage) as LocalForageComplete;
     if (localforagePrototype) {
-        (localforagePrototype.getItems as Partial<MethodsCoreWithGetItems['getItems']>) = localforageGetItems;
-        localforagePrototype.getItems.indexedDB = function <T> (
+        (localforagePrototype.getItems as Partial<MethodsCoreWithGetItems['getItems']>) =
+            localforageGetItems;
+        localforagePrototype.getItems.indexedDB = function <T>(
             this: Forage<DbInfoIndexedDB> & LocalForageComplete,
             keys?: string[] | null
         ) {
             return (getItemsIndexedDB<T>).apply(this, [keys!]);
         };
-        localforagePrototype.getItems.websql = function <T> (
+        localforagePrototype.getItems.websql = function <T>(
             this: Forage<DbInfoWebsql> & LocalForageComplete,
             keys?: string[] | null
         ) {
             return (getItemsWebsql<T>).apply(this, [keys!]);
         };
-        localforagePrototype.getItems.generic = function <T> (
+        localforagePrototype.getItems.generic = function <T>(
             this: LocalForageComplete,
             keys?: string[] | null
         ) {

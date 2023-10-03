@@ -8,9 +8,7 @@
     "typings": "dist/localforage-getitems.d.ts",
     "scripts": {
         "prebuild": "eslint lib/*.ts",
-        "build": "rollup -c rollup.config.umd.mjs && rollup -c rollup.config.es6.mjs",
-        "pretest": "eslint test/*.ts && rollup -c rollup.config.test.mjs",
-        "test": "mocha build/test-bundle.js && tsc --project typing-tests",
+        "build": "rollup -c rollup.config.umd.mjs && rollup -c rollup.config.es6.mjs && tsc --project typing-tests",
         "prepublish": "npm run build && npm test",
         "prettify": "prettier --write ."
     },

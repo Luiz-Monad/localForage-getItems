@@ -22,6 +22,6 @@
         "checkJs": true,
 
         "rootDir": "./lib",
-        "outDir": "./build"
+        "outDir": ""
     }
 }
