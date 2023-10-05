@@ -55,8 +55,7 @@ export function executeCallback<T>(promise: Promise<T>, callback?: Callback<T>) 
                 callback(null, result);
             },
             function (error) {
-                // eslint-disable-next-line @typescript-eslint/ban-types
-                (callback as Function)(error);
+                callback(error, undefined!);
             }
         );
     }

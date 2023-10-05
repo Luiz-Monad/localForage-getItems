@@ -20,8 +20,7 @@
             promise.then(function (result) {
                 callback(null, result);
             }, function (error) {
-                // eslint-disable-next-line @typescript-eslint/ban-types
-                callback(error);
+                callback(error, undefined);
             });
         }
     }
@@ -244,13 +243,15 @@
                 return (getItemsGeneric).apply(this, [keys]);
             };
         }
-        return localforagePrototype;
+        return localforage;
     }
     const extendPrototypeResult = extendPrototype(localforage);
 
     exports.extendPrototype = extendPrototype;
     exports.extendPrototypeResult = extendPrototypeResult;
     exports.getItemsGeneric = getItemsGeneric;
+    exports.getItemsIndexedDB = getItemsIndexedDB;
+    exports.getItemsWebsql = getItemsWebsql;
     exports.localforageGetItems = localforageGetItems;
 
 }));

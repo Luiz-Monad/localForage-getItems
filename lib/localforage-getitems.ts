@@ -3,7 +3,6 @@ import { executeCallback } from './utils';
 import { getItemsGeneric, getAllItemsUsingIterate } from './getitems-generic';
 import { DbInfo as DbInfoIndexedDB, getItemsIndexedDB } from './getitems-indexeddb';
 import { DbInfo as DbInfoWebsql, getItemsWebsql } from './getitems-websql';
-export { getItemsGeneric } from './getitems-generic';
 import localforage from '@luiz-monad/localforage';
 
 export function localforageGetItems<T>(): Promise<ItemsResult<T>>;
@@ -60,7 +59,7 @@ export function extendPrototype(localforage: LocalForageComplete) {
             return (getItemsGeneric<T>).apply(this, [keys!]);
         };
     }
-    return localforagePrototype;
+    return localforage;
 }
 
 export const extendPrototypeResult = extendPrototype(localforage);
@@ -74,6 +73,10 @@ export interface MethodsCoreWithGetItems {
         callback?: Callback<ItemsResult<T>>
     ): Promise<ItemsResult<T>>;
 }
+
+export { getItemsGeneric } from './getitems-generic';
+export { getItemsIndexedDB } from './getitems-indexeddb';
+export { getItemsWebsql } from './getitems-websql';
 
 declare module '@luiz-monad/localforage/dist/types' {
     interface LocalForageComplete {

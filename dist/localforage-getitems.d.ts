@@ -1,5 +1,4 @@
 import { Callback, LocalForageComplete } from '@luiz-monad/localforage/dist/types';
-export { getItemsGeneric } from './getitems-generic';
 export declare function localforageGetItems<T>(): Promise<ItemsResult<T>>;
 export declare function localforageGetItems<T>(keys: string[] | null, callback?: Callback<ItemsResult<T>>): Promise<ItemsResult<T>>;
 export declare function extendPrototype(localforage: LocalForageComplete): LocalForageComplete;
@@ -9,6 +8,9 @@ export interface MethodsCoreWithGetItems {
     getItems<T>(): Promise<ItemsResult<T>>;
     getItems<T>(keys: string[] | null, callback?: Callback<ItemsResult<T>>): Promise<ItemsResult<T>>;
 }
+export { getItemsGeneric } from './getitems-generic';
+export { getItemsIndexedDB } from './getitems-indexeddb';
+export { getItemsWebsql } from './getitems-websql';
 declare module '@luiz-monad/localforage/dist/types' {
     interface LocalForageComplete {
         getItems: MethodsCoreWithGetItems['getItems'] & {
