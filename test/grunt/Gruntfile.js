@@ -40,13 +40,25 @@ module.exports = exports = function (grunt) {
         },
         shell: {
             build: {
-                command: 'npm run root:build'
+                command: 'npm run root:build',
+                stdin: false,
+                stdout: false,
+                stderr: false,
+                timeout: 20000
             },
             deps: {
-                command: 'npm run root:build:deps'
+                command: 'npm run root:build:deps',
+                stdin: false,
+                stdout: false,
+                stderr: false,
+                timeout: 20000
             },
             test: {
-                command: 'npm run root:build:test'
+                command: 'npm run root:build:test',
+                stdin: false,
+                stdout: false,
+                stderr: false,
+                timeout: 20000
             }
         },
         watch: {
