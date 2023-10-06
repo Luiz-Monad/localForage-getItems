@@ -9,7 +9,9 @@
     "scripts": {
         "prebuild": "eslint lib/*.ts",
         "build": "rollup -c rollup.config.umd.mjs && rollup -c rollup.config.es6.mjs && tsc --project typing-tests",
-        "pretest": "eslint test/*.ts && rollup -c rollup.config.test.deps.mjs && rollup -c rollup.config.test.mjs",
+        "build:deps": "rollup -c rollup.config.test.deps.mjs",
+        "build:test": "rollup -c rollup.config.test.mjs",
+        "pretest": "eslint test/*.ts && npm run build:deps && npm run build:test",
         "test": "cd test/grunt && npx npm test",
         "watch": "cd test/grunt && npx npm run watch",
         "prepublish": "npm run build && npm test",
@@ -42,6 +44,8 @@
         "@rollup/plugin-typescript": "^11.1.4",
         "@types/chai": "^4.3.6",
         "@types/mocha": "^10.0.2",
+        "@types/sinon": "^10.0.18",
+        "@types/sinon-chai": "^3.2.10",
         "@types/websql": "^0.0.28",
         "@typescript-eslint/eslint-plugin": "^6.7.4",
         "@typescript-eslint/parser": "^6.7.4",
@@ -55,6 +59,8 @@
         "prettier": "^3.0.3",
         "requirejs": "^2.3.6",
         "rollup": "^3.29.4",
+        "sinon": "^16.0.0",
+        "sinon-chai": "^3.7.0",
         "typescript": "^5.2.2"
     },
     "dependencies": {

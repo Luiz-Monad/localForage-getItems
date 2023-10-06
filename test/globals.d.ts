@@ -38,7 +38,7 @@ declare global {
 
     namespace Chai {
         interface Assertion {
-            (type: any, message?: string): Assertion;
+            (type?: any, message?: string): Assertion;
         }
     }
 

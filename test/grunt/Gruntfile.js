@@ -40,17 +40,31 @@ module.exports = exports = function (grunt) {
         },
         shell: {
             build: {
-                command: 'npm run build'
+                command: 'npm run root:build'
+            },
+            deps: {
+                command: 'npm run root:build:deps'
+            },
+            test: {
+                command: 'npm run root:build:test'
             }
         },
         watch: {
-            test: {
-                files: ['../../rollup.config.test.*', '../*.ts', '../**/*.ts', '../*.html'],
-                tasks: ['build:test']
+            build: {
+                files: ['../../rollup.config.mjs', '../../tsconfig.json', '../../lib/**/*.ts'],
+                tasks: ['shell:build', 'shell:deps']
             },
-            'mocha:unit': {
-                files: ['../../build/test/*.js'],
-                tasks: ['connect:test', 'mocha:unit']
+            deps: {
+                files: ['../../rollup.config.test.*.mjs', '../../package.json'],
+                tasks: ['shell:deps']
+            },
+            test: {
+                files: ['../../rollup.config.test.mjs', '../../test/**/*.ts', '../**/*.ts'],
+                tasks: ['shell:test']
+            },
+            copy: {
+                files: ['../*.html'],
+                tasks: ['copy']
             }
         }
     });
@@ -58,9 +72,9 @@ module.exports = exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.registerTask('default', ['connect', 'watch']);
-    grunt.registerTask('build:test', ['shell:build', 'copy:html', 'copy:css']);
-    grunt.registerTask('serve', ['connect:test', 'watch']);
-    grunt.registerTask('test', ['build:test', 'connect:test', 'mocha']);
+    grunt.registerTask('build:test', ['shell', 'copy']);
+    grunt.registerTask('serve', ['connect', 'watch']);
+    grunt.registerTask('test', ['build:test', 'connect', 'mocha']);
 
     grunt.registerTask('mocha', 'custom function to run mocha tests', function () {
         const { runner } = require('mocha-headless-chrome');

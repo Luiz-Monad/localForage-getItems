@@ -43,24 +43,26 @@ function runTestSuit() {
 
 const require: any = globalThis.require;
 if (require) {
-    const paths = {
-        localforage: 'localforage/localforage',
-        'localforage-getitems': 'localforage-getitems/localforage-getitems',
-        chai: 'chai/chai',
-        mocha: 'mocha/mocha'
-    };
-    const alias = {
-        'test.api': '/test/test.api'
-    };
     requirejs.config({
         baseUrl: '/deps/',
-        paths: { ...paths, ...alias }
+        paths: {
+            config: 'config/config'
+        }
     });
-    require(['localforage'], (localforage: LocalForageDriver) => {
-        window.localforage = localforage;
-        require(Object.keys(paths), () => {
-            mocha.ui();
-            require(['test.api'], runTestSuit);
+    require(['config'], (config: Record<string, string>) => {
+        const alias = {
+            'test.api': '/test/test.api'
+        };
+        requirejs.config({
+            baseUrl: '/deps/',
+            paths: { ...config, ...alias }
+        });
+        require(['localforage'], (localforage: LocalForageDriver) => {
+            window.localforage = localforage;
+            require(Object.keys(config), () => {
+                mocha.ui();
+                require(['test.api'], runTestSuit);
+            });
         });
     });
 } else if (window.addEventListener) {

@@ -1,6 +1,8 @@
 {
     "scripts": {
-        "build": "cd ../.. && npm run pretest",
+        "root:build": "cd ../.. && npm run build",
+        "root:build:deps": "cd ../.. && npm run build:deps",
+        "root:build:test": "cd ../.. && npm run build:test",
         "test": "npm install && node -e \"require('grunt').cli()\" null test",
         "watch": "npm install && node -e \"require('grunt').cli()\" null"
     },
