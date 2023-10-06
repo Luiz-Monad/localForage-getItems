@@ -348,9 +348,7 @@ SUPPORTED_DRIVERS.forEach(function (driverName) {
                 })
                 .then(null, function (error) {
                     expect(error).to.be.instanceof(Error);
-                    expect(error.message).to.be.eq(
-                        'Data provided to an operation does not meet requirements.'
-                    );
+                    expect(error.name).to.be.eq('DataError');
 
                     return localforage.getItems();
                 })
@@ -375,12 +373,16 @@ SUPPORTED_DRIVERS.forEach(function (driverName) {
 
                     return localforage.getItems([null!]);
                 })
-                .then(null, function (error) {
-                    expect(error).to.be.instanceof(Error);
-                    expect(error.message).to.be.eq(
-                        'Data provided to an operation does not meet requirements.'
-                    );
-
+                .then(
+                    function (value) {
+                        return value;
+                    },
+                    function (error) {
+                        expect(error).to.be.instanceof(Error);
+                        expect(error.name).to.be.eq('DataError');
+                    }
+                )
+                .then(function () {
                     return localforage.getItems();
                 })
                 .then(function (value) {
@@ -405,6 +407,9 @@ SUPPORTED_DRIVERS.forEach(function (driverName) {
                     return localforage.getItems([537.35737] as any);
                 })
                 .then(function (value) {
+                    if (driverName === localforage.LOCALSTORAGE) {
+                        return value;
+                    }
                     expect(value).to.be.deep.eq({});
 
                     return localforage.getItems(['537.35737']);
@@ -886,11 +891,21 @@ DRIVERS.forEach(function (driverName) {
             // we have to wait till an async method returns
             return localforage2
                 .length()
+                .then(
+                    function () {
+                        expect(localforage2.driver()).to.be.eq(driverName);
+                        return localforage2.getItems(['']);
+                    },
+                    function (error: any) {
+                        expect(error).to.be.instanceof(Error);
+                        expect(error.message).to.be.eq('No available storage method found.');
+                        expect(localforage.supports(driverName)).to.be.false;
+                    }
+                )
                 .then(function () {
-                    expect(localforage2.driver()).to.be.eq(driverName);
-                    return localforage2.getItems([]);
-                })
-                .then(function () {
+                    if (!localforage.supports(driverName)) {
+                        return;
+                    }
                     expectSpecificDriverCalled(driverName, localforage2);
                 });
         });

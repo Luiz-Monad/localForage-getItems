@@ -24,25 +24,25 @@ export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete,
                     .db!.transaction(dbInfo.storeName, 'readonly')
                     .objectStore(dbInfo.storeName);
 
-                const set = keys.sort(comparer);
+                const sortedKeys = keys.sort(comparer);
 
                 const keyRangeValue = IDBKeyRange.bound(
-                    keys[0],
-                    keys[keys.length - 1],
+                    sortedKeys[0],
+                    sortedKeys[keys.length - 1],
                     false,
                     false
                 );
 
                 let breq: IDBRequest<any>;
 
-                if ('getAll' in (store as any)) {
+                if ('getAll' in (store as any) && 'getAllKeys' in (store as any)) {
                     const req = store.getAll(keyRangeValue);
                     req.onsuccess = function () {
                         const result: ItemsResult<T> = {};
                         const avalue = req.result as any[] | undefined;
                         if (avalue !== undefined) {
                             for (let i = 0, len = avalue.length; i < len; i++) {
-                                result[i.toString()] = avalue[i];
+                                result[sortedKeys[i]] = avalue[i];
                             }
                         }
                         resolve(result);
@@ -63,17 +63,17 @@ export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete,
 
                         const key = cursor.key as string;
 
-                        while (key > set[i]) {
+                        while (key > sortedKeys[i]) {
                             i++; // The cursor has passed beyond this key. Check next.
 
-                            if (i === set.length) {
+                            if (i === sortedKeys.length) {
                                 // There is no next. Stop searching.
                                 resolve(result);
                                 return;
                             }
                         }
 
-                        if (key === set[i]) {
+                        if (key === sortedKeys[i]) {
                             // The current cursor value should be included and we should continue
                             // a single step in case next item has the same key or possibly our
                             // next key in set.
@@ -87,7 +87,7 @@ export function getItemsIndexedDB<T>(this: Forage<DbInfo> & LocalForageComplete,
                             cursor.continue();
                         } else {
                             // cursor.key not yet at set[i]. Forward cursor to the next key to hunt for.
-                            cursor.continue(set[i]);
+                            cursor.continue(sortedKeys[i]);
                         }
                     };
                     breq = req;

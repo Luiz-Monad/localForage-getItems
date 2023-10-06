@@ -36,15 +36,18 @@ function getItemsGeneric(keys) {
     const localforageInstance = this;
     const promise = new Promise(function (resolve, reject) {
         const itemPromises = [];
-        for (let i = 0, len = keys.length; i < len; i++) {
-            itemPromises.push((getItemKeyValue).call(localforageInstance, keys[i]));
+        const sortedKeys = keys.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+        for (let i = 0, len = sortedKeys.length; i < len; i++) {
+            itemPromises.push((getItemKeyValue).call(localforageInstance, String(sortedKeys[i])));
         }
         Promise.all(itemPromises)
             .then(function (keyValuePairs) {
             const result = {};
             for (let i = 0, len = keyValuePairs.length; i < len; i++) {
                 const keyValuePair = keyValuePairs[i];
-                result[keyValuePair.key] = keyValuePair.value;
+                if (keyValuePair.value) {
+                    result[sortedKeys[i]] = keyValuePair.value;
+                }
             }
             resolve(result);
         })
@@ -98,17 +101,17 @@ function getItemsIndexedDB(keys) {
             const store = dbInfo
                 .db.transaction(dbInfo.storeName, 'readonly')
                 .objectStore(dbInfo.storeName);
-            const set = keys.sort(comparer);
-            const keyRangeValue = idbKeyRange.bound(keys[0], keys[keys.length - 1], false, false);
+            const sortedKeys = keys.sort(comparer);
+            const keyRangeValue = idbKeyRange.bound(sortedKeys[0], sortedKeys[keys.length - 1], false, false);
             let breq;
-            if ('getAll' in store) {
+            if ('getAll' in store && 'getAllKeys' in store) {
                 const req = store.getAll(keyRangeValue);
                 req.onsuccess = function () {
                     const result = {};
                     const avalue = req.result;
                     if (avalue !== undefined) {
                         for (let i = 0, len = avalue.length; i < len; i++) {
-                            result[i.toString()] = avalue[i];
+                            result[sortedKeys[i]] = avalue[i];
                         }
                     }
                     resolve(result);
@@ -126,15 +129,15 @@ function getItemsIndexedDB(keys) {
                         return;
                     }
                     const key = cursor.key;
-                    while (key > set[i]) {
+                    while (key > sortedKeys[i]) {
                         i++; // The cursor has passed beyond this key. Check next.
-                        if (i === set.length) {
+                        if (i === sortedKeys.length) {
                             // There is no next. Stop searching.
                             resolve(result);
                             return;
                         }
                     }
-                    if (key === set[i]) {
+                    if (key === sortedKeys[i]) {
                         // The current cursor value should be included and we should continue
                         // a single step in case next item has the same key or possibly our
                         // next key in set.
@@ -148,7 +151,7 @@ function getItemsIndexedDB(keys) {
                     }
                     else {
                         // cursor.key not yet at set[i]. Forward cursor to the next key to hunt for.
-                        cursor.continue(set[i]);
+                        cursor.continue(sortedKeys[i]);
                     }
                 };
                 breq = req;

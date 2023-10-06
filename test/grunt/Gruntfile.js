@@ -44,21 +44,21 @@ module.exports = exports = function (grunt) {
                 stdin: false,
                 stdout: false,
                 stderr: false,
-                timeout: 20000
+                timeout: 5000
             },
             deps: {
                 command: 'npm run root:build:deps',
                 stdin: false,
                 stdout: false,
                 stderr: false,
-                timeout: 20000
+                timeout: 5000
             },
             test: {
                 command: 'npm run root:build:test',
                 stdin: false,
                 stdout: false,
                 stderr: false,
-                timeout: 20000
+                timeout: 5000
             }
         },
         watch: {

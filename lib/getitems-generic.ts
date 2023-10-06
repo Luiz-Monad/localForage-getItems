@@ -7,8 +7,12 @@ export function getItemsGeneric<T>(this: LocalForageComplete, keys: string[]) {
     const promise = new Promise<ItemsResult<T>>(function (resolve, reject) {
         const itemPromises: Promise<KeyValue<T>>[] = [];
 
-        for (let i = 0, len = keys.length; i < len; i++) {
-            itemPromises.push((getItemKeyValue<T>).call(localforageInstance, keys[i]));
+        const sortedKeys = keys.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+
+        for (let i = 0, len = sortedKeys.length; i < len; i++) {
+            itemPromises.push(
+                (getItemKeyValue<T>).call(localforageInstance, String(sortedKeys[i]))
+            );
         }
 
         Promise.all(itemPromises)
@@ -17,7 +21,9 @@ export function getItemsGeneric<T>(this: LocalForageComplete, keys: string[]) {
                 for (let i = 0, len = keyValuePairs.length; i < len; i++) {
                     const keyValuePair = keyValuePairs[i];
 
-                    result[keyValuePair.key] = keyValuePair.value;
+                    if (keyValuePair.value) {
+                        result[sortedKeys[i]] = keyValuePair.value;
+                    }
                 }
                 resolve(result);
             })
